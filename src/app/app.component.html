@@ -1,0 +1,89 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#"><img src="../assets/stackoverflow.png" width="50px" height="50px">Stack<b>overflow</b></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="nav navbar-nav navbar-left">
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/about">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/product">Products</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="/teams">For teams</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<h5>Search here for question</h5>
+<div class="container">
+<div class="row">
+  <div class="col"> Tagged : <input #taggedname></div>
+  <div class="col">Order : <select>
+    <option selected>desc</option>
+    <option>asc</option>
+  </select></div>
+  <div class="col">Sort : <select>
+    <option selected>activity</option>
+    <option>votes</option>
+  </select>
+</div>
+<button class="btn btn-secondary"(click)="fetchquestions(taggedname.value)">Search</button>
+</div>
+</div>
+  
+<table class="table">
+  <thead>
+      <tr>
+        <th>Sl no</th>
+        <th>Answer Count </th>
+        <th>Creation Date</th>
+        <th>Details Of your Search</th>
+
+      </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let question of QusetionData | paginate: { itemsPerPage: 10, currentPage: p };let i=index;" >
+      <td>{{(10*(p-1))+i+1}} </td>
+      <td>{{question.answer_count}} Answers</td>
+      <td>{{question.creation_date * 1000 | date}}</td>
+      <td><a href="{{ question.link}}">{{ question.title }}</a>
+        <div>
+          <span class="date">Asked {{ question.creation_date * 1000 | date }}</span>
+        </div>
+
+        <a  href="#" *ngFor="let tag of question.tags">{{ tag }}|</a>
+        <div >
+          <div >
+            <div class="item">
+              <a  href="{{ question.owner.link }}">
+                <img src="{{ question.owner.profile_image }}" width="10%" height="10%">
+              </a>
+              <div>
+                <a  href="{{ question.owner.link }}">
+                  {{ question.owner.display_name }}
+                </a>
+                <div>  
+                  Repo: <b>{{question.owner.reputation}}</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </td>
+     
+    </tr>
+  </tbody>
+  <div *ngIf="!QusetionData?.length">
+    <br>
+    <br>
+<p style="text-align: center;">No QusetionData available.</p>
+</div>
+</table>
+<pagination-controls style="text-align:center;"
+(pageChange)="p = $event">
+</pagination-controls>
+
+<router-outlet></router-outlet>
